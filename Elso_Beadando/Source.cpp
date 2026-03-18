@@ -36,11 +36,12 @@ static array<vec2, 6> quad = {
     vec2(-1.0f, 1.0f)
 };
 
+GLfloat circleRadius = 50.0f;
+
 GLuint centerLoc = 0;
 GLuint radiusLoc = 0;
 GLuint resolutionLoc = 0;
 GLuint locationWindowSize = 0;
-
 GLuint XoffsetLoc = 0;
 GLuint YoffsetLoc = 0;
 GLuint YLineLoc = 0;
@@ -54,10 +55,13 @@ mat4			translateMatrix = translate(mat4(1.0f), vec3(-0.5, 0.5, 0.0));
 mat4			rotateMatrix = rotate(mat4(1.0f), (GLfloat)glfwGetTime(), vec3(0.0f, 0.0f, 1.0f));
 eAnimationType	animationType = Bouncing;
 
-GLfloat circleRadius = 50.0f;
-
 GLfloat segmentYOffset = 0.0f;
 GLfloat moveStep = 20.0f;
+
+GLboolean moving = GL_FALSE;
+GLfloat vx = 0.0f;
+GLfloat vy = 0.0f;
+GLfloat stepLength = 10.0f;
 
 void initShaderProgram()
 {
@@ -78,11 +82,7 @@ void initShaderProgram()
 
     centerLoc = glGetUniformLocation(program[ShaderProgram], "center");
     radiusLoc = glGetUniformLocation(program[ShaderProgram], "radius");
-
     locationWindowSize = glGetUniformLocation(program[ShaderProgram], "windowSize");
-    locationMatProjection = glGetUniformLocation(program[ShaderProgram], "matProjection");
-    locationMatModelView = glGetUniformLocation(program[ShaderProgram], "matModelView");
-
     XoffsetLoc = glGetUniformLocation(program[ShaderProgram], "offsetX");
     YoffsetLoc = glGetUniformLocation(program[ShaderProgram], "offsetY");
     YLineLoc = glGetUniformLocation(program[ShaderProgram], "lineY");
@@ -97,7 +97,26 @@ void display(GLFWwindow* window, double currentTime)
     glClear(GL_COLOR_BUFFER_BIT);
     glUniform2f(locationWindowSize, windowWidth, windowHeight);
 
-    glProgramUniform1f(program[ShaderProgram], YLineLoc, segmentYOffset);  // ez a fel/le mozgatás
+    glProgramUniform1f(program[ShaderProgram], YLineLoc, segmentYOffset); // Szakasz mozgatása
+
+    float limit = windowWidth / 2.0f - circleRadius;
+    if (moving) {
+        x += vx;
+        y += vy;
+
+        if (x > limit || x < -limit) {
+            vx = -vx; 
+        }
+
+        if (y > limit || y < -limit) {
+            vy = -vy; 
+        }
+
+        glProgramUniform1f(program[ShaderProgram], XoffsetLoc, x);
+        glProgramUniform1f(program[ShaderProgram], YoffsetLoc, y);
+    }
+
+    
     switch (animationType) {
     case RotateFirst:
         glProgramUniform1f(program[ShaderProgram], XoffsetLoc, 0.0f);
@@ -106,10 +125,9 @@ void display(GLFWwindow* window, double currentTime)
         rotateMatrix = rotate(glm::mat4(1.0f), (GLfloat)currentTime, vec3(0.0f, 0.0f, 1.0f));
         matModel = translateMatrix * rotateMatrix;
         break;
-
+        
     case Bouncing:
         matModel = mat4(1.0);
-        float limit = windowWidth / 2.0f - circleRadius;
         if (xDir) {
             x += increment;
 
@@ -117,6 +135,7 @@ void display(GLFWwindow* window, double currentTime)
                 increment = -increment;
             glProgramUniform1f(program[ShaderProgram], XoffsetLoc, x);
             glProgramUniform1f(program[ShaderProgram], YoffsetLoc, y);
+            
         }
         else if (yDir) {
             y += increment;
@@ -129,6 +148,7 @@ void display(GLFWwindow* window, double currentTime)
 
         break;
     }
+    
 
     glUniform2f(centerLoc, windowWidth / 2.0f, windowHeight / 2.0f);
     glUniform1f(radiusLoc, circleRadius);
@@ -181,6 +201,12 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
         segmentYOffset -= moveStep;
     }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+        moving = true;
+        float angleRad = glm::radians(25.0f);
+        vx = stepLength * cos(angleRad);
+        vy = stepLength * sin(angleRad);
+    }
 }
 
 void cursorPosCallback(GLFWwindow* window, double xPos, double yPos) {}
@@ -190,6 +216,9 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
 int main(void)
 {
     init(3, 3, GLFW_OPENGL_COMPAT_PROFILE);
+
+	glfwSetWindowAspectRatio(window, 1, 1);
+	glfwSetWindowSizeLimits(window, 600, 600, 600, 600);
 
     initShaderProgram();
 
@@ -203,6 +232,7 @@ int main(void)
     cout << "V\tY tengelyen mozog" << endl;
 	cout << "UP\tszakasz mozgatas felfele" << endl;
 	cout << "DOWN\tszakasz mozgatas lefele" << endl;
+	cout << "S\t25 fokos, 10 px iranyvektor inditas" << endl;
 
     /** A megadott window struktúra "close flag" vizsgálata. */
     while (!glfwWindowShouldClose(window))

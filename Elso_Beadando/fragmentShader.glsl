@@ -24,7 +24,6 @@ void main()
     float lineThickness = 1.5;
 
     bool circleCrossesLine = abs(movedCenter.y - (center.y + lineY)) <= radius;
-
     if (!circleCrossesLine) {
         vec3 tmp = red;
         red = green;

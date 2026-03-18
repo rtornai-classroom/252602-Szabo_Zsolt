@@ -1,0 +1,4 @@
+﻿  Source.cpp
+C:\Users\Zsolt\source\repos\252602-Szabo_Zsolt\Elso_Beadando\Source.cpp(98,50): warning C4244: 'argument': conversion from 'GLint' to 'GLfloat', possible loss of data
+C:\Users\Zsolt\source\repos\252602-Szabo_Zsolt\Elso_Beadando\Source.cpp(98,37): warning C4244: 'argument': conversion from 'GLint' to 'GLfloat', possible loss of data
+  Elso_Beadando.vcxproj -> C:\Users\Zsolt\source\repos\252602-Szabo_Zsolt\Elso_Beadando\x64\Debug\Elso_Beadando.exe
