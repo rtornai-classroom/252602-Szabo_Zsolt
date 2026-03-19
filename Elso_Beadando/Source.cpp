@@ -168,10 +168,11 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, windowWidth, windowHeight);
 
     matModel = mat4(1.0);
+    // Kamera poziciója
     matView = lookAt(
-        vec3(0.0f, 0.0f, 9.0f),		// the position of your camera, in world space
-        vec3(0.0f, 0.0f, 0.0f),		// where you want to look at, in world space
-        vec3(0.0f, 1.0f, 0.0f));	// upVector, probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down, which can be great too
+        vec3(0.0f, 0.0f, 9.0f),
+        vec3(0.0f, 0.0f, 0.0f),
+        vec3(0.0f, 1.0f, 0.0f));
     matModelView = matView * matModel;
     glUniformMatrix4fv(locationMatModelView, 1, GL_FALSE, value_ptr(matModelView));
     glUniformMatrix4fv(locationMatProjection, 1, GL_FALSE, value_ptr(matProjection));
@@ -179,10 +180,8 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    /** ESC billentyûre kilépés. */
     if ((action == GLFW_PRESS) && (key == GLFW_KEY_ESCAPE))
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    /** A billentyûk lenyomásának és felengedésének regisztrálása. Lehetővé teszi gombkombinációk használatát. */
     if (action == GLFW_PRESS)
         keyboard[key] = GL_TRUE;
     else if (action == GLFW_RELEASE)
@@ -203,7 +202,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     }
     if (key == GLFW_KEY_S && action == GLFW_PRESS) {
         moving = true;
-        float angleRad = glm::radians(25.0f);
+        constexpr float angleRad = glm::radians(25.0f);
         vx = stepLength * cos(angleRad);
         vy = stepLength * sin(angleRad);
     }
@@ -224,7 +223,6 @@ int main(void)
 
     framebufferSizeCallback(window, windowWidth, windowHeight);
 
-    /** Karakterkódolás a szövegekhez. */
     setlocale(LC_ALL, "");
     cout << "Billentyuk:" << endl;
     cout << "ESC\texit" << endl;
@@ -234,18 +232,16 @@ int main(void)
 	cout << "DOWN\tszakasz mozgatas lefele" << endl;
 	cout << "S\t25 fokos, 10 px iranyvektor inditas" << endl;
 
-    /** A megadott window struktúra "close flag" vizsgálata. */
     while (!glfwWindowShouldClose(window))
     {
         /** A kód, amellyel rajzolni tudunk a GLFWwindow objektumunkba. */
         display(window, glfwGetTime());
-        /** Double buffered mûködés. */
+
         glfwSwapBuffers(window);
         /** Események kezelése az ablakunkkal kapcsolatban, pl. gombnyomás. */
         glfwPollEvents();
     }
-    /** Felesleges objektumok törlése. */
+
     cleanUpScene(EXIT_SUCCESS);
-    /** Kilépés EXIT_SUCCESS kóddal. */
     return EXIT_SUCCESS;
 }
