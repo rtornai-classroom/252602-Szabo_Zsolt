@@ -22,8 +22,11 @@ void main()
 
     float thirdLength = windowSize.x / 6.0;
     float lineThickness = 1.5;
+    float linePos = center.y + lineY;
 
-    bool circleCrossesLine = abs(movedCenter.y - (center.y + lineY)) <= radius;
+    bool circleCrossesLine = abs(movedCenter.y - linePos) <= radius &&
+                             abs(movedCenter.x - center.x) <= thirdLength;
+
     if (!circleCrossesLine) {
         vec3 tmp = red;
         red = green;
