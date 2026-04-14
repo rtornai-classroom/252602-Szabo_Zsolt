@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Elso_Beadando.vcxproj" Id="f7255188-a6df-46e2-9661-71f1ba7e2bcc" />
+</Solution>
