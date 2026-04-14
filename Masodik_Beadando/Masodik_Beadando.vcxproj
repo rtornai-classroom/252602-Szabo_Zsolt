@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f7255188-a6df-46e2-9661-71f1ba7e2bcc}</ProjectGuid>
-    <RootNamespace>Elso_Beadando</RootNamespace>
+    <ProjectGuid>{3472f85a-df88-4ac7-9e68-3a3a8e3f273c}</ProjectGuid>
+    <RootNamespace>Masodik_Beadando</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
