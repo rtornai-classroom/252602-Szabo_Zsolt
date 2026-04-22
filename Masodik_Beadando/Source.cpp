@@ -156,27 +156,6 @@ void initShaderProgram() {
 		isLine = glGetUniformLocation(program[programItem], "isLine");
 	}
 
-	/*
-
-	drawBezierCurve(myControlPoints);
-
-
-	glBindVertexArray(VAO[VAOVerticesData]);
-	glBindBuffer(GL_ARRAY_BUFFER, BO[VBOVerticesData]);
-	glBufferData(GL_ARRAY_BUFFER, pointToDraw.size() * sizeof(vec2), pointToDraw.data(), GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), 0);
-
-	glBindVertexArray(VAO[VAOControlPointsData]);
-	glBindBuffer(GL_ARRAY_BUFFER, BO[VBOControlPointsData]);
-	glBufferData(GL_ARRAY_BUFFER, myControlPoints.size() * sizeof(vec2), myControlPoints.data(), GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), 0);
-
-	*/
-
 	glUseProgram(program[QuadScreenProgram]);
 
 	matModel = mat4(1.0);
@@ -204,9 +183,21 @@ void display(GLFWwindow* window, double currentTime) {
 		glDrawArrays(GL_LINE_STRIP, 0, (GLsizei)pointToDraw.size());
 
 		// Kontrollpoligon
+		glUseProgram(0);
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(value_ptr(matProjection));
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(value_ptr(matView * matModel));
+
+		glColor3f(0.5f, 0.5f, 0.5f);
 		glLineWidth(1.0f);
-		glBindVertexArray(VAO[VAOControlPointsData]);
-		glDrawArrays(GL_LINE_STRIP, 0, (GLsizei)myControlPoints.size());
+		glBegin(GL_LINE_STRIP);
+		for (const auto& p : myControlPoints) {
+			glVertex2f(p.x, p.y);
+		}
+		glEnd();
+
+		glUseProgram(program[QuadScreenProgram]);
 	}
 
 	// Kontrollpontok

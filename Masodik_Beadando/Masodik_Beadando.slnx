@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Masodik_Beadando.vcxproj" />
+  <Project Path="Masodik_Beadando.vcxproj" Id="3472f85a-df88-4ac7-9e68-3a3a8e3f273c" />
 </Solution>

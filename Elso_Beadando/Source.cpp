@@ -63,11 +63,12 @@ GLfloat vx = 0.0f;
 GLfloat vy = 0.0f;
 GLfloat stepLength = 10.0f;
 
-void initShaderProgram()
+void static initShaderProgram()
 {
     ShaderInfo shader_info[] = {
         {GL_FRAGMENT_SHADER, "./fragmentShader.glsl"},
         {GL_VERTEX_SHADER, "./vertexShader.glsl"},
+
         {GL_NONE, nullptr} };
 
     /** A vertex-fragment program elkészítése. */
@@ -91,7 +92,7 @@ void initShaderProgram()
 }
 
 /** A kód, amellyel rajzolni tudunk a GLFWwindow objektumunkba. */
-void display(GLFWwindow* window, double currentTime)
+void static display(GLFWwindow* window, double currentTime)
 {
     /** Töröljük le a színbuffert! */
     glClear(GL_COLOR_BUFFER_BIT);
