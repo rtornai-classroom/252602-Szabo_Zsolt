@@ -20,7 +20,7 @@ enum eTexture {
 
 #include <common.cpp>
 
-GLchar windowTitle[] = "Kockak Beadando";
+GLchar windowTitle[] = "Harmadik Beadando";
 
 // --- Globális állapot ---
 float   r = 9.0f;
